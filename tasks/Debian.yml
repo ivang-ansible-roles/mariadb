@@ -1,0 +1,18 @@
+---
+- name: Install Mariadb on Debian/Ubuntu
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - mariadb-server
+    - mariadb-client
+    - python-mysqldb
+
+- name: Configure mysql server
+  template:
+    src: server-512M.cnf.j2
+    dest: /etc/mysql/mariadb.conf.d/60-my-server.cnf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart mysql

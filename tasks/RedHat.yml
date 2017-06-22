@@ -1,0 +1,30 @@
+---
+- name: Add mariadb repo
+  yum_repository:
+    name: MariaDB
+    description: mariadb
+    baseurl: http://yum.mariadb.org/10.1/centos6-amd64
+    gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+    gpgcheck: 1
+    enabled: 1
+
+- name: Install Mariadb on RedHat
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+    - MariaDB-server
+    - MariaDB-client
+    - MySQL-python27
+
+- name: Start and enable MariaDB Service
+  service: name=mysql state=started enabled=yes
+
+- name: Configure mysql server
+  template:
+    src: server-512M.cnf.j2
+    dest: /etc/my.cnf.d/my-server.cnf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart mysql

@@ -1,0 +1,8 @@
+---
+- include: "{{ ansible_os_family }}.yml"
+
+- name: Remove MariaDB anonymous user
+  mysql_user: name='' host_all=yes state=absent
+
+- name: Drop MariaDB test db
+  mysql_db: name=test state=absent
