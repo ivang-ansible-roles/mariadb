@@ -1,5 +1,23 @@
 ---
-- include: "{{ ansible_os_family }}.yml"
+
+- name: Install Mariadb on Ubuntu
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - mariadb-server
+    - mariadb-client
+    - python3-pip
+    - python3-mysqldb
+
+- name: Configure mysql server
+  template:
+    src: server-512M.cnf.j2
+    dest: /etc/mysql/mariadb.conf.d/60-my-server.cnf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart mysql
 
 - name: Remove MariaDB anonymous user
   mysql_user: name='' host_all=yes state=absent
