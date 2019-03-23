@@ -2,13 +2,12 @@
 
 - name: Install Mariadb on Ubuntu
   apt:
-    name: "{{ item }}"
+    name:
+      - mariadb-server
+      - mariadb-client
+      - python3-pip
+      - python3-mysqldb
     state: latest
-  with_items:
-    - mariadb-server
-    - mariadb-client
-    - python3-pip
-    - python3-mysqldb
 
 - name: Configure mysql server
   template:
